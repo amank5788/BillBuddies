@@ -1,4 +1,6 @@
-import happy from '../../images/happy.svg';
+
+import happy from '../../../images/happy_announcement_re_tsm0.svg'
+
 
 function About(){
     return(
@@ -12,6 +14,7 @@ function About(){
                 <img src={happy} alt="aman" />
             </div>
           </div>
+          
         </>
     )
 }
