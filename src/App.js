@@ -5,13 +5,31 @@ import Footer from './pages/components/footer/Footer';
 import Functionalities from './pages/components/main/Functionalities';
 import Navbar from './pages/components/header/Navbar';
 import Signup from './pages/components/Signup';
-import { Outlet } from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import Login from './pages/components/Login';
+import Dashboard from './pages/Dashboard';
+import Protected from './pages/AuthLayout';
+import Dash from './pages/components/main/Dash';
 
 function App() {
   return (
    <>
     <Navbar />
-       <Outlet />
+       
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='login' element={ <Protected authentication={false}>
+            <Login />
+          </Protected>} />
+          <Route path='signup' element={<Signup />} />
+          <Route path='dashboard/*' element={<Dashboard />} />
+          
+        
+      
+      
+        </Routes>
+      
     <Footer />
    </>
   );
