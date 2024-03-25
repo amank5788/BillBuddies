@@ -6,17 +6,36 @@ import Input from '../Input.js'
 import Button from '../Button.js'
 import {useDispatch} from 'react-redux'
 import {useForm} from 'react-hook-form'
+import axios from 'axios'
 
 function Signup() {
    
     const [error, setError] = useState("")
     const dispatch = useDispatch()
     const {register, handleSubmit} = useForm()
+ 
 
     const create = async(data) => {
+        const formData = new FormData();
+
+        // Append key-value pairs to the FormData object
+           
+           for(let k in data){
+            
+            formData.append(k,data[k]);
+           }
+           console.log(formData);
         setError("")
         try {
-            
+           
+            const response=await axios.post('http://localhost:8000/api/v1/users/register', formData);
+            console.log(formData);
+            if(response){
+                console.log("signup");
+            }
+            else{
+                console.log(data);
+            }
         } catch (error) {
             setError(error.message)
         }
@@ -46,10 +65,25 @@ function Signup() {
 
                 <form onSubmit={handleSubmit(create)}>
                     <div className='space-y-5'>
+                    <Input
+                        label="Avatar: "
+                        type='file'
+                        accept="image/*"
+                        {...register("avatar", {
+                            required: true,
+                        })}
+                        />
+                    <Input
+                        label="Username: "
+                        placeholder="Enter your Username"
+                        {...register("username", {
+                            required: true,
+                        })}
+                        />
                         <Input
                         label="Full Name: "
                         placeholder="Enter your full name"
-                        {...register("name", {
+                        {...register("fullName", {
                             required: true,
                         })}
                         />

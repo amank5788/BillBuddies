@@ -10,9 +10,9 @@ function Menu () {
   return (
     <div className="w-3/4 m-auto">
       <div>
-        {menuData.map((data,index)=>{
+        {menuData.map((data)=>{
             return(
-                <div className="flex">
+                <div className="flex" key={data.index}>
                     <div className="w-5">
                     <img src={data.logo} alt={data.name} />
                     </div>
