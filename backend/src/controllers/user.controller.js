@@ -64,15 +64,15 @@ const RegisterUser = asyncHandler(async (req, res) => {
 })
 
 const loginUser = asyncHandler(async (req, res) => {
-    const { username, email, password } = req.body
-    if (!username || !email) {
-        throw new apiError(400, 'Username & password is required !!')
-    }
+    const { email, password } = req.body
+    console.log(req.body);
+   
     const user = await User.findOne({
-        $or: [{ username }, { email }]
+        $or: [ { email }]
     })
-
+   
     if (!user) {
+        console.log('user not found');
         throw new apiError(404, 'User not found !!')
     }
 
@@ -103,9 +103,10 @@ const loginUser = asyncHandler(async (req, res) => {
         )
 })
 const logoutUser = asyncHandler(async (req, res) => {
-    const id = req.user._id;
+    console.log(req);
+    const id = req.body._id;
     await User.findByIdAndUpdate(
-        req.user._id,
+        id,
         {
             $set: {
                 refreshToken: undefined

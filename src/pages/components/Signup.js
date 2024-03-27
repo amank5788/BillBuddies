@@ -12,7 +12,8 @@ function Signup() {
    
     const [error, setError] = useState("")
     const dispatch = useDispatch()
-    const {register, handleSubmit} = useForm()
+    const {register, handleSubmit} = useForm();
+    const navigate=useNavigate();
  
 
     const create = async(data) => {
@@ -24,20 +25,30 @@ function Signup() {
             
             formData.append(k,data[k]);
            }
+              // Append avatar file to FormData
+        formData.append('avatar', data.avatar[0]); // Assuming avatar is a FileList
+
            console.log(formData);
         setError("")
         try {
            
-            const response=await axios.post('http://localhost:8000/api/v1/users/register', formData);
-            console.log(formData);
+            const response = await axios.post('http://localhost:8000/api/v1/users/register', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data' // Set content type to multipart/form-data
+                }
+            });
+
+            
             if(response){
-                console.log("signup");
+                dispatch(login(response.data.data));
+                navigate('/dashboard');
             }
             else{
                 console.log(data);
+                setError("error in coonecting with server")
             }
         } catch (error) {
-            setError(error.message)
+            setError(error.message);
         }
     }
 

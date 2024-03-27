@@ -23,7 +23,9 @@ function App() {
             <Login />
           </Protected>} />
           <Route path='signup' element={<Signup />} />
-          <Route path='dashboard/*' element={<Dashboard />} />
+          <Route path='dashboard/*' element={
+            <Dashboard />
+          } />
           
         
       
