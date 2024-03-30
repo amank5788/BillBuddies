@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { logout } from "../../../app/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import AuthServices from "../../../services/AuthServices";
 
 
 function Navbar(){
@@ -12,7 +13,7 @@ function Navbar(){
   const Logout=async()=>{
     try {
            console.log(user); 
-      const response=  await axios.post('http://localhost:8000/api/v1/users/logout',user);
+      const response=  await AuthServices.logout(user);
       if(response){
         dispatch(logout());
         navigate('/');

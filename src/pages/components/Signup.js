@@ -1,12 +1,13 @@
 import React, {useState} from 'react'
 
 import {Link ,useNavigate} from 'react-router-dom'
-import { login } from '../../app/authSlice.js'
+import { login as authLogin} from '../../app/authSlice.js'
 import Input from '../Input.js'
 import Button from '../Button.js'
 import {useDispatch} from 'react-redux'
 import {useForm} from 'react-hook-form'
 import axios from 'axios'
+import AuthServices from '../../services/AuthServices.js'
 
 function Signup() {
    
@@ -40,8 +41,20 @@ function Signup() {
 
             
             if(response){
-                dispatch(login(response.data.data));
-                navigate('/dashboard');
+               
+                setError("")
+                try{
+                    const response= await AuthServices.login(data,setError);
+                    if(response){
+                     console.log(response)
+                     dispatch(authLogin(response.user));
+                     console.log('/dashboard/dash');
+                     navigate('/dashboard');
+                    }
+        
+                }catch(err){
+                        setError(err);
+                }
             }
             else{
                 console.log(data);

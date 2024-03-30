@@ -1,12 +1,13 @@
 import React, {useState} from 'react'
 import {Link, useNavigate} from 'react-router-dom'
-import { login as authLogin, login } from '../../app/authSlice.js'
+import { login as authLogin } from '../../app/authSlice.js'
 import Button from '../Button.js'
 import Input from '../Input.js'
 import {useDispatch} from "react-redux"
 
 import {useForm} from "react-hook-form"
 import axios from 'axios'
+import AuthServices from '../../services/AuthServices.js'
 
 function Login() {
     const navigate = useNavigate()
@@ -16,23 +17,20 @@ function Login() {
 
     const Login = async(data) => {
         setError("")
-        try {
-            
-            const response= await axios.post('http://localhost:8000/api/v1/users/login', data);
+        try{
+            const response= await AuthServices.login(data,setError);
             if(response){
-                //console.log(response.data.data.user);
-                dispatch(login(response.data.data.user));
-                console.log('/dashboard/dash');
-                navigate('/dashboard');
+             console.log(response)
+             dispatch(authLogin(response.user));
+             console.log('/dashboard/dash');
+             navigate('/dashboard');
             }
-            else{
-                
-                setError('error while connecting server')
-            }
-        } catch (error) {
-            
-            setError(error.message)
+
+        }catch(err){
+                setError(err);
         }
+      
+        
     }
 
   return (
