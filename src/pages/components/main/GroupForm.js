@@ -2,13 +2,16 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import AuthServices from '../../../services/AuthServices';
 
-function GroupForm() {
+
+
+function GroupForm({onClose}) {
   const [inputFields, setInputFields] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const[groupName,setGroupName]=useState('');
   const [users,setUsers]=useState([]);
 
+  
 
   useEffect(()=>{
     const fetchuser=async()=>{
@@ -92,7 +95,7 @@ function GroupForm() {
       );
 
       if(response){ 
-          console.log("successfully acreated")
+          console.log("successfully created")
       }
       else{
         console.log("err while connecting to server");
@@ -101,6 +104,7 @@ function GroupForm() {
     }catch(err){
       console.log(err);
     }
+    onClose();
 
   };
 

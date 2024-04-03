@@ -44,10 +44,26 @@ function Signup() {
                
                 setError("")
                 try{
+                    const combinedData={};
                     const response= await AuthServices.login(data,setError);
                     if(response){
                      console.log(response)
-                     dispatch(authLogin(response.user));
+                     try {
+                        const alluser=await axios.get('http://localhost:8000/api/v1/users//get-all-users',);
+                        if(alluser){
+
+                            combinedData.alluser=alluser.data.data;
+                            combinedData.user=response.user;
+                             
+                        }
+                        else{
+                            console.log('err while fetching')
+                        }
+                        
+                     } catch (error) {
+                          console.log(error)
+                     }
+                     dispatch(authLogin(combinedData));
                      console.log('/dashboard/dash');
                      navigate('/dashboard');
                     }

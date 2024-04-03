@@ -6,6 +6,8 @@ import Login from "./components/Login";
 import Activity from "./components/main/Activity";
 import AllExpanses from "./components/main/AllExpanses";
 import Protected from "./AuthLayout";
+import GroupLayout from "./components/main/GroupLayout";
+import GroupInfo from "./components/main/GroupInfo";
 
 
 
@@ -16,7 +18,7 @@ function Dashboard () {
       <div className=" flex w-1/4">
       <Menu />
       </div>
-      <div className="w-1/2 rounded-xl shadow-xl p-4">
+      <div className="w-3/4 ">
       <Routes>
         <Route path="/" element={
           <Protected authentication={true}>
@@ -38,12 +40,15 @@ function Dashboard () {
             <AllExpanses />
           </Protected>
         } />
+         <Route path="/group" element={
+          <Protected authentication={true}>
+            <GroupLayout />
+          </Protected>
+        } />
       
       </Routes>
       </div>
-      <div className="w-1/4">
-
-      </div>
+     
     </div>
   )
 };
