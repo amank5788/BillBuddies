@@ -22,6 +22,7 @@ function Login() {
             const response= await AuthServices.login(data,setError);
             if(response){
              console.log(response)
+             setError("")
              try {
                 const alluser=await axios.get('http://localhost:8000/api/v1/users/get-all-users',);
                 if(alluser){
@@ -38,7 +39,7 @@ function Login() {
              }
            
              dispatch(authLogin(combinedData));
-             console.log('/dashboard/dash');
+             //console.log('/dashboard/dash');
              navigate('/dashboard');
             }
 

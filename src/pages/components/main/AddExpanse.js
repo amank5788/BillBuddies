@@ -3,6 +3,8 @@ import icon from '../../../images/people red.png'
 import axios from "axios";
 import AuthServices from "../../../services/AuthServices";
 import { nanoid } from "nanoid";
+import { useSelector } from "react-redux";
+const _ = require('lodash');
 
 function AddExpanse ({members, onClose,grp_id}) {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +15,20 @@ function AddExpanse ({members, onClose,grp_id}) {
   const [amount,setAmount]=useState()
   const [date,setDate]=useState(new Date().toISOString().split('T')[0])
   const [paidby,setPaidby]=useState()
+
+
+  //make an object with members name and id and all
+  var membersDetail=[];
+  const allMemeber=_.cloneDeep(useSelector((state)=>state.auth.allUserData));
+  const user=useSelector((state)=>state.auth.userData);
+  for(let member of members){
+    for(let user of allMemeber){
+      if(member===user._id){
+         membersDetail.push(user);
+      }
+    }
+  }
+
 
 
 
@@ -69,6 +85,7 @@ function AddExpanse ({members, onClose,grp_id}) {
    } catch (error) {
     console.log(error);
    }
+   onClose();
 
   }
   return (
@@ -100,7 +117,7 @@ function AddExpanse ({members, onClose,grp_id}) {
         </svg>
       </button>
       {isOpen && (
-        <ul className="absolute right-0 mt-2 w-56 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
+        <ul className="absolute left-12 mt-2 w-56 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
         {currencies.map((curr)=>(
           <>
           <li key={nanoid()} onClick={() => handleOptionClick(curr)} className="hover:bg-gray-100 px-4 py-2 cursor-pointer">{curr}</li>
@@ -138,9 +155,9 @@ function AddExpanse ({members, onClose,grp_id}) {
       </button>
       {isOpenPayee && (
         <ul className="absolute right-0 mt-2 w-56 bg-white border rounded-md shadow-lg max-h-60 overflow-y-auto">
-        {members.map((member)=>(
+        {membersDetail.map((member)=>(
           <>
-          <li key={nanoid()} onClick={() => handleOptionClickPayee(member)} className="hover:bg-gray-100 px-4 py-2 cursor-pointer">{member}</li>
+          <li key={nanoid()} onClick={() => handleOptionClickPayee(member._id)} className="hover:bg-gray-100 px-4 py-2 cursor-pointer">{member._id===user._id?'You':member.fullName}</li>
           </>
       ))}
          

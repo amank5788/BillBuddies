@@ -24,7 +24,10 @@ function App() {
           </Protected>} />
           <Route path='signup' element={<Signup />} />
           <Route path='dashboard/*' element={
+            <Protected authentication={true}>
             <Dashboard />
+          </Protected>
+            
           } />
           
         

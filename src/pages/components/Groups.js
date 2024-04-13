@@ -8,6 +8,7 @@ import AuthServices from "../../services/AuthServices";
 import {  useSelector } from "react-redux";
 import grpicon from '../../images/people.png'
 import { useNavigate } from "react-router-dom";
+import { nanoid } from "nanoid";
 
 
 function Groups () {
@@ -58,7 +59,7 @@ function Groups () {
     </div>
     <div>
     {group.map((group)=><>
-            <button key={group._id} className="flex mx-2"
+            <button key={nanoid()} className="flex mx-2"
             onClick={()=> navigate('/dashboard/group',{ state: { name:group.groupName,groupid:group._id,member:group.members} })}
             >
             <div className="w-5">

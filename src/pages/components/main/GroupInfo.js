@@ -1,11 +1,14 @@
 import React, { useEffect } from "react"
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
+
 const _ = require('lodash');
 
-function GroupInfo ({groupinfo}) {
-    const location=useLocation();
-    var membersDetail=_.cloneDeep(useSelector((state)=>state.auth.allUserData));
+function GroupInfo ({groupinfo=null}) {
+  const location=useLocation();
+  var membersDetail=_.cloneDeep(useSelector((state)=>state.auth.allUserData?state.auth.allUserData:null));
+  if(groupinfo!==null && membersDetail!==null){
+   
     console.log(groupinfo)
     var members=groupinfo.group.members;
     console.log(membersDetail)
@@ -23,7 +26,9 @@ function GroupInfo ({groupinfo}) {
             //console.log(member.net)
         }
     }
-}
+  }
+    
+
 
 //adding overall detail back to groupinfo
 var i=0;
@@ -41,7 +46,7 @@ console.log(groupinfo)
 
 //console.log(location.state)
 
- 
+}
 
     
   return (

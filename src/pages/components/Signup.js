@@ -49,7 +49,7 @@ function Signup() {
                     if(response){
                      console.log(response)
                      try {
-                        const alluser=await axios.get('http://localhost:8000/api/v1/users//get-all-users',);
+                        const alluser=await axios.get('http://localhost:8000/api/v1/users/get-all-users',);
                         if(alluser){
 
                             combinedData.alluser=alluser.data.data;

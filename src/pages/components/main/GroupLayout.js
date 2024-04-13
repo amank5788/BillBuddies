@@ -6,6 +6,7 @@ import Popup from "./Popup";
 import AddExpanse from "./AddExpanse";
 import AuthServices from "../../../services/AuthServices";
 import GroupInfo from "./GroupInfo";
+import Protected from '../../AuthLayout';
 const _ = require('lodash');
 
 
@@ -17,6 +18,10 @@ function GroupLayout () {
     const[sendData,setSendData]=useState();
     const location=useLocation();
     const navigate=useNavigate();
+    const [uniqueExpanses,setUniqueExpanses]=useState([]);
+    
+    const group_id=location.state.groupid;
+    
     
     
 
@@ -27,23 +32,10 @@ function GroupLayout () {
 
    
     useEffect(()=>{
-        const fetchdata=async()=>{
-           try{
-            const response=await axios.get('',);
-            if(response){
-               setData(response.data);
-               setLoading(false);
-            }
-            else{
-              console.log("errr in fetching data");
-            }
-           }
-           catch(err){
-            console.log(err);
-           }
-        }
+      
         const fetchgroupdatas=async()=>{
-          const group_id=location.state.groupid;
+          var uns=[];
+          
           console.log(AuthServices.getAccessToken());
           try {
             const data= await axios.post('http://localhost:8000/api/v1/group/fetch-group-info',{group_id},
@@ -53,8 +45,28 @@ function GroupLayout () {
             if(data){
               console.log(data);
               setSendData(data.data.data);
-              setInfoload(false)
-              setLoading(false);
+              var prev="aman";
+              var flag=0;
+              for(let exp of data.data.data.groupExpenses){
+                  if(prev!==exp.nanoId){
+                    console.log(exp);
+                    // const dst=_.cloneDeep(exp);
+                    uns.push(exp);
+                     
+                       flag=1;
+                       prev=exp.nanoId;
+                  }
+              }
+              
+
+              setInfoload(false);
+              if(flag===1 || data.data.data.groupExpenses.length===0){
+                
+                setUniqueExpanses(uns);
+                setLoading(false);
+                console.log(uniqueExpanses);
+              }
+             
               //console.log(sendData);
                    
                    
@@ -73,7 +85,7 @@ function GroupLayout () {
         //fetchdata();
 
         
-    },[location.state.groupid])
+    },[group_id,isPopupOpen])
   return (
     <div className="flex">
     <div className="w-2/3 shadow-xl rounded-xl p-2">
@@ -98,21 +110,24 @@ function GroupLayout () {
             </Popup>
       </div>
 
-      {loading?(<></>):
-      ( <div>{sendData.groupExpenses.map((expanse)=>(<>
-        <div className="flex justify-between p-2 m-1 rounded-xl bg-gray-400">
-          <div>{expanse.description}</div>
+      {loading?(<div className="text-center">Loading</div>):
+      ( <div>
+        { uniqueExpanses.map((exp)=>(<>
+                
+        <div key={exp.nanoId} className="flex justify-between p-2 m-1 rounded-xl bg-gray-400">
+          <div>{exp.description}</div>
           <div className="flex">
             <div className="p-1">paid by</div>
             <div className="p-1">you lent</div>
           </div>
         </div>
-      </>))}</div>)
+      </>))}
+      </div>)
       }
      
     </div>
     <div className="w-1/3">
-    {infoload?(<>loading</>):(<><GroupInfo groupinfo ={sendData}/></>)}
+    {infoload?(<>loading</>):(<Protected><GroupInfo groupinfo ={sendData}/></Protected>)}
     
     </div>
     </div>
